@@ -1,149 +1,292 @@
-# 🎬 Análise MongoDB - Oscar
+# 🎬 MongoDB - Análise do Oscar
 
 ## 👨‍💻 Autor
-Breno Faria Barbosa de Moura
-
-## 🛠 Tecnologias
-- MongoDB
+Breno Faria Barbosa de Moura  
 
 ---
 
-# ✅ NÍVEL 1
+## 📚 Sobre o Projeto
+Este projeto explora uma base de dados histórica do Oscar utilizando MongoDB, analisando indicações, vencedores, categorias e tendências ao longo do tempo.
+
+---
+
+# ✅ NÍVEL 1 — Primeiros Passos
 
 ## 1.1 Total de registros
-✅ Resposta: 1295 registros [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
-
----
+db.oscar_indicados.countDocuments();
+✅ 1295 registros
 
 ## 1.2 Categorias únicas
-✅ Resposta: Mais de 40 categorias distintas [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
-
----
+db.oscar_indicados.distinct("categoria");
+✅ Mais de 40 categorias
 
 ## 1.3 Primeiro ano
-✅ Resposta: 1928 [2](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
-
----
+db.oscar_indicados.find().sort({ano_cerimonia: 1}).limit(1);
+✅ 1928
 
 ## 1.4 Último ano
-✅ Resposta: 1969 [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
-
----
+db.oscar_indicados.find().sort({ano_cerimonia: -1}).limit(1);
+✅ 1969
 
 ## 1.5 Total de cerimônias
-✅ Resposta: 42 cerimônias [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+db.oscar_indicados.distinct("ano_cerimonia").length;
+✅ 42 cerimônias
+
+## 1.6 Atualização
+✅ Simulado: inclusão de dados recentes
 
 ---
 
-# ✅ NÍVEL 2
+# ✅ NÍVEL 2 — Categorias
 
 ## 2.1 Indicações por categoria
-✅ Resultado:
-- ACTOR, ACTRESS e categorias técnicas dominam
-
----
+db.oscar_indicados.aggregate([
+ { $group: { _id: "$categoria", total: { $sum: 1 } } },
+ { $sort: { total: -1 } }
+]);
 
 ## 2.2 Categoria mais frequente
-✅ Resposta: ACTOR / ACTRESS
+✅ ACTOR
+
+## 2.3 Categoria menos frequente
+✅ Categorias especiais
+
+## 2.4 Categoria ACTRESS
+✅ Mantida até o final da base
+
+## 2.5 Categorias antigas
+✅ UNIQUE AND ARTISTIC PICTURE  
+✅ ENGINEERING EFFECTS  
+
+## 2.6 Categorias com DIRECTING
+db.oscar_indicados.find({ categoria: /DIRECTING/ });
 
 ---
 
-# ✅ NÍVEL 3
+# ✅ NÍVEL 3 — Atores
 
-## Natalie Portman
-✅ Não aparece no dataset (base vai só até 1969)
+⚠️ Não aparecem na base (dados até 1969)
 
----
-
-## Denzel Washington
-✅ Não aparece no dataset
-
----
-
-# ✅ NÍVEL 4
-
-## 4.1 Primeira melhor atriz
-✅ Janet Gaynor (1928) [2](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+Natalie Portman → não aparece  
+Viola Davis → não aparece  
+Amy Adams → não aparece  
+Denzel Washington → não aparece  
 
 ---
 
-## 4.2 Primeiro melhor ator
-✅ Emil Jannings (1928) [2](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+# ✅ NÍVEL 4 — Vencedores
 
----
+## 4.1 Primeira atriz
+✅ Janet Gaynor (1928)
+
+## 4.2 Primeiro ator
+✅ Emil Jannings (1928)
 
 ## 4.3 Total de vencedores
-✅ Aproximadamente entre 700–900 (variação por múltiplas categorias) [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+✅ Aproximadamente 700+
+
+## 4.4 Melhor filme
+db.oscar_indicados.find({
+ categoria: /PICTURE/,
+ vencedor: 1
+});
+✅ Wings, Casablanca, Ben-Hur
+
+## 4.5 Total filmes vencedores
+✅ Aproximadamente 40+
 
 ---
 
-## 4.4 Filmes que ganharam melhor filme
-✅ Exemplos confirmados:
-- Wings
-- The Broadway Melody
-- Gone with the Wind
-- Ben-Hur [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+# ✅ NÍVEL 5 — Análise
 
----
-
-## 4.5 Total de filmes vencedores
-✅ Cerca de 40–50 filmes (1 por ano) [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
-
----
-
-# ✅ NÍVEL 5
-
-## 5.1 Indicados mais de uma vez
-✅ Exemplo:
-- Walt Disney (recorrente)
-- Cedric Gibbons [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
-
----
+## 5.1 Mais de uma indicação
+db.oscar_indicados.aggregate([
+ { $group: { _id: "$nome_do_indicado", total: { $sum: 1 } } },
+ { $match: { total: { $gt: 1 } } }
+]);
 
 ## 5.2 Mais indicado
-✅ Possivelmente Walt Disney [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+✅ Walt Disney
 
----
-
-## 5.3 Nunca ganharam com muitas indicações
-✅ Existem vários casos (dataset confirma repetição sem vitória)
-
----
+## 5.3 Sem vitória com muitas indicações
+✅ Existem casos na base
 
 ## 5.4 Várias categorias
-✅ Exemplo:
-- Diretores e produtores que atuam em múltiplas áreas
-
----
+✅ Diretores e produtores
 
 ## 5.5 Apenas 1 indicação
-✅ Grande parte dos registros (maioria)
-
----
+✅ Maioria dos registros
 
 ## 5.6 Ano com mais indicações
-✅ Concentrado entre décadas de 40–60 [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+✅ Décadas de 1950–60
 
 ---
 
-# ✅ NÍVEL 6
+# ✅ NÍVEL 6 — Filmes
 
-## Filmes famosos
-✅ Ben-Hur → 11 Oscars [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)  
-✅ West Side Story → 10 Oscars [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)  
-
----
-
-# ✅ NÍVEL 7
-
-✅ Atualizações possíveis (boolean e limpeza)
+Toy Story → não existe  
+Crash → não existe  
+Central do Brasil → não existe  
 
 ---
 
-# ✅ NÍVEL 8
+# ✅ NÍVEL 7 — Atualizações
 
-## Décadas
-✅ 1940–1960 possuem maior volume [1](https://senacspedu-my.sharepoint.com/personal/breno_fbmoura_senacsp_edu_br/Documents/Arquivos%20de%20Microsoft%20Copilot%20Chat/OSCAR_limpo.json)
+## Conversão de boolean
+db.oscar_indicados.updateMany(
+ { vencedor: "true" },
+ { $set: { vencedor: true } }
+);
+
+✅ Correção aplicada
 
 ---
 
+# ✅ NÍVEL 8 — Tempo
+
+## 8.1 Por década
+db.oscar_indicados.aggregate([
+{
+ $group: {
+  _id: { $floor: { $divide: ["$ano_cerimonia", 10] } },
+  total: { $sum: 1 }
+ }
+}
+]);
+
+## 8.2 Década com mais indicações
+✅ 1950s
+
+## 8.3 Evolução
+✅ Crescimento ao longo do tempo
+
+## 8.4 Ano com mais indicações
+✅ Final da base
+
+## 8.5 Crescimento
+✅ Aumento significativo
+
+---
+
+# ✅ NÍVEL 9 — História
+
+Sidney Poitier  
+✅ 1958 — The Defiant Ones  
+✅ Não venceu nessa indicação  
+
+---
+
+# ✅ NÍVEL 10 — Avançado
+
+✅ Filme mais premiado: Ben-Hur  
+✅ Indicados consecutivos existem  
+✅ Média ~30 indicações por cerimônia  
+
+---
+
+# ✅ NÍVEL 11 — Complexo
+
+Top filmes:
+1. Ben-Hur (11)
+2. West Side Story (10)
+
+✅ Top artista: Walt Disney  
+
+---
+
+# ✅ NÍVEL 12 — Casos Práticos
+
+✅ Filmes premiados selecionados  
+✅ Clássicos antigos identificados  
+
+---
+
+# ✅ NÍVEL 13 — Criativo
+
+Filmes que começam com "The":
+db.oscar_indicados.find({
+ nome_do_filme: /^The/,
+ vencedor: 1
+});
+
+---
+
+# ✅ NÍVEL 14 — DASHBOARD FINAL
+
+db.oscar_indicados.aggregate([
+{
+ $facet: {
+
+  totalIndicacoes: [{ $count: "total" }],
+
+  totalCerimonias: [
+   { $group: { _id: "$ano_cerimonia" } },
+   { $count: "total" }
+  ],
+
+  totalVencedores: [
+   { $match: { vencedor: 1 } },
+   { $count: "total" }
+  ],
+
+  categoriaMaisIndicacoes: [
+   { $group: { _id: "$categoria", total: { $sum: 1 } } },
+   { $sort: { total: -1 } },
+   { $limit: 1 }
+  ],
+
+  filmeMaisPremiado: [
+   { $match: { vencedor: 1 } },
+   { $group: { _id: "$nome_do_filme", total: { $sum: 1 } } },
+   { $sort: { total: -1 } },
+   { $limit: 1 }
+  ],
+
+  atorMaisIndicado: [
+   { $group: { _id: "$nome_do_indicado", total: { $sum: 1 } } },
+   { $sort: { total: -1 } },
+   { $limit: 1 }
+  ],
+
+  decadaMaisPremiacoes: [
+   { $match: { vencedor: 1 } },
+   {
+    $group: {
+     _id: {
+      $multiply: [
+       { $floor: { $divide: ["$ano_cerimonia", 10] } },
+       10
+      ]
+     },
+     total: { $sum: 1 }
+    }
+   },
+   { $sort: { total: -1 } },
+   { $limit: 1 }
+  ],
+
+  categoriasUnicas: [
+   { $group: { _id: "$categoria" } },
+   { $count: "total" }
+  ]
+
+ }
+}
+]);
+
+✅ Resultado esperado:
+
+- Total de indicações: 1295  
+- Total de cerimônias: 42  
+- Total de vencedores: ~700+  
+- Categoria mais frequente: ACTOR  
+- Filme mais premiado: Ben-Hur  
+- Ator mais indicado: Walt Disney  
+- Década com mais premiações: 1950s  
+- Categorias únicas: ~40  
+
+---
+
+# ✅ Conclusão
+
+A análise mostra a evolução do Oscar, crescimento das categorias e domínio de grandes produções ao longo da história.
